@@ -1,14 +1,43 @@
 {
-  "name": "@todo-api/source",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {},
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {
-    "@nx/js": "21.4.1",
-    "@nx/workspace": "21.4.1",
-    "nx": "21.4.1"
-  },
-  "packageManager": "pnpm@9.5.0+sha1.8c155dc114e1689d18937974f6571e0ceee66f1d"
+    "name": "@todo-api/source",
+    "version": "0.0.0",
+    "license": "MIT",
+    "scripts": {
+        "format": "prettier . --write"
+    },
+    "private": true,
+    "devDependencies": {
+        "@eslint/js": "^9.8.0",
+        "@nx/eslint": "21.4.1",
+        "@nx/eslint-plugin": "21.4.1",
+        "@nx/express": "^21.4.1",
+        "@nx/js": "21.4.1",
+        "@nx/node": "21.4.1",
+        "@nx/web": "21.4.1",
+        "@nx/webpack": "21.4.1",
+        "@nx/workspace": "21.4.1",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+        "@svgr/webpack": "^8.0.1",
+        "@swc-node/register": "~1.9.1",
+        "@swc/core": "~1.5.7",
+        "@swc/helpers": "~0.5.11",
+        "@types/express": "^4.17.21",
+        "@types/node": "20.19.9",
+        "eslint": "^9.8.0",
+        "eslint-config-prettier": "^10.0.0",
+        "nx": "21.4.1",
+        "prettier": "^2.6.2",
+        "react-refresh": "^0.10.0",
+        "typescript": "~5.8.2",
+        "typescript-eslint": "^8.29.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "packageManager": "pnpm@9.5.0+sha1.8c155dc114e1689d18937974f6571e0ceee66f1d",
+    "dependencies": {
+        "@types/cors": "^2.8.19",
+        "axios": "^1.6.0",
+        "cors": "^2.8.5",
+        "express": "^4.21.2",
+        "tslib": "^2.3.0"
+    }
 }
