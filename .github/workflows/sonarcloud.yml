@@ -2,33 +2,35 @@ name: SonarCloud
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
     types: [ opened, synchronize, reopened ]
 
 jobs:
-  sonarcloud:
-    name: SonarCloud Scan
+  scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          projectBaseDir: .
+          version: 9
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      # (optionnel) tests + couverture
+      # - run: pnpm test -- --coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: aymericM-pro_backend-cloudrun
-          SONAR_ORGANIZATION: aymericm-pro
+        with:
+          projectBaseDir: .
