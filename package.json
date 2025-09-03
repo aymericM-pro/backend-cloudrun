@@ -1,0 +1,14 @@
+{
+  "name": "@todo-api/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "21.4.1",
+    "@nx/workspace": "21.4.1",
+    "nx": "21.4.1"
+  },
+  "packageManager": "pnpm@9.5.0+sha1.8c155dc114e1689d18937974f6571e0ceee66f1d"
+}
