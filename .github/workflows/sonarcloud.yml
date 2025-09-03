@@ -21,13 +21,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          run_install: false  # pnpm install sera fait manuellement
+          run_install: false
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
-
-      # (optionnel) tests + couverture
-      # - run: pnpm test -- --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
