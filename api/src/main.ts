@@ -35,4 +35,6 @@ app.delete("/todos/:id", (req, res) => {
     res.json(removed);
 });
 
+const PORT = process.env.PORT ?? "3000";
+
 app.listen(3000, () => console.log(`API running on http://localhost:3000}`));
