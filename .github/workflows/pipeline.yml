@@ -48,7 +48,7 @@ jobs:
   #          projectBaseDir: .
 
   build:
-    name: Build app (Nx) et publier dist
+    name: Build app
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
