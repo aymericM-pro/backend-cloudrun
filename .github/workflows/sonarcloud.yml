@@ -102,8 +102,8 @@ jobs:
 
   trivy-image-local:
     name: trivy-scan
+    needs: docker
     runs-on: ubuntu-latest
-    needs: build
     permissions:
       contents: read
       security-events: write
@@ -121,8 +121,8 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          load: true                  # ← charge dans le daemon local
-          tags: app:scan-candidate    # tag local arbitraire
+          load: true
+          tags: app:scan-candidate
 
       - name: Trivy image scan
         uses: aquasecurity/trivy-action@0.29.0
@@ -130,7 +130,7 @@ jobs:
           image-ref: app:scan-candidate
           severity: CRITICAL,HIGH
           ignore-unfixed: true
-          exit-code: '0'              # ← échoue si vuln CRITICAL/HIGH
+          exit-code: '0'
           format: sarif
           output: trivy-image.sarif
 
