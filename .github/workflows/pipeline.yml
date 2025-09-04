@@ -44,12 +44,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate ESLint report (tolerant)
-        run: |
-          pnpm nx lint api --format json -o eslint-report.json || true
+      - name: Generate ESLint report (via script)
+        run: pnpm run lint:report || true
 
       - name: Check ESLint report
-        run: ls -lah && cat eslint-report.json || echo "ESLint report not found"
+        run: |
+          ls -lah
+          cat eslint-report.json || echo "No report found"
 
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
