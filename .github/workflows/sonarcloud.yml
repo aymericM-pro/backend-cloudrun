@@ -24,15 +24,16 @@ jobs:
           cache: pnpm
           cache-dependency-path: '**/pnpm-lock.yaml'
 
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
+      - name: Enable Corepack + setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.12.0 --activate   # ← ajoute ça (ou la version que tu utilises localement)
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
         run: pnpm nx run api:test -- --coverage
-
   scan:
     name: SonarCloud scan
     runs-on: ubuntu-latest
