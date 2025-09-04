@@ -10,5 +10,5 @@ RUN corepack enable && corepack prepare pnpm@latest --activate \
 COPY dist/api ./dist/api
 
 ENV NODE_ENV=production
-EXPOSE 8008
+EXPOSE 8080
 CMD ["node", "dist/api/main.js"]
