@@ -1,6 +1,6 @@
 [
   {
-    "filePath": "/Users/aymericmaillot/Desktop/cloudRunTest/todo-api/api/src/main.ts",
+    "filePath": "api/src/main.ts",
     "messages": [
       {
         "ruleId": "no-console",
@@ -130,49 +130,60 @@
         }
       },
       {
-        "ruleId": "no-console",
+        "ruleId": "no-unused-vars",
         "severity": 1,
-        "message": "Unexpected console statement. Only these console methods are allowed: warn, error.",
-        "line": 27,
+        "message": "'x' is assigned a value but never used.",
+        "line": 23,
         "column": 9,
-        "nodeType": "MemberExpression",
-        "messageId": "limited",
-        "endLine": 27,
-        "endColumn": 20,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 23,
+        "endColumn": 10,
         "suggestions": [
           {
+            "messageId": "removeVar",
+            "data": {
+              "varName": "x"
+            },
             "fix": {
               "range": [
-                493,
-                525
+                435,
+                445
               ],
               "text": ""
             },
-            "messageId": "removeConsole",
-            "data": {
-              "propertyName": "log"
-            },
-            "desc": "Remove the console.log()."
+            "desc": "Remove unused variable 'x'."
           }
         ]
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'x' is assigned a value but never used.",
+        "line": 23,
+        "column": 9,
+        "nodeType": null,
+        "messageId": "unusedVar",
+        "endLine": 23,
+        "endColumn": 10
       },
       {
         "ruleId": "@typescript-eslint/no-explicit-any",
         "severity": 1,
         "message": "Unexpected any. Specify a different type.",
-        "line": 35,
+        "line": 30,
         "column": 17,
         "nodeType": "TSAnyKeyword",
         "messageId": "unexpectedAny",
-        "endLine": 35,
+        "endLine": 30,
         "endColumn": 20,
         "suggestions": [
           {
             "messageId": "suggestUnknown",
             "fix": {
               "range": [
-                674,
-                677
+                570,
+                573
               ],
               "text": "unknown"
             },
@@ -182,8 +193,8 @@
             "messageId": "suggestNever",
             "fix": {
               "range": [
-                674,
-                677
+                570,
+                573
               ],
               "text": "never"
             },
@@ -195,59 +206,59 @@
         "ruleId": "security/detect-object-injection",
         "severity": 1,
         "message": "Generic Object Injection Sink",
-        "line": 54,
+        "line": 49,
         "column": 5,
         "nodeType": "MemberExpression",
-        "endLine": 54,
+        "endLine": 49,
         "endColumn": 15
       },
       {
         "ruleId": "security/detect-object-injection",
         "severity": 1,
         "message": "Generic Object Injection Sink",
-        "line": 54,
+        "line": 49,
         "column": 23,
         "nodeType": "MemberExpression",
-        "endLine": 54,
+        "endLine": 49,
         "endColumn": 33
       },
       {
         "ruleId": "security/detect-object-injection",
         "severity": 1,
         "message": "Function Call Object Injection Sink",
-        "line": 55,
+        "line": 50,
         "column": 14,
         "nodeType": "MemberExpression",
-        "endLine": 55,
+        "endLine": 50,
         "endColumn": 24
       },
       {
         "ruleId": "consistent-return",
         "severity": 1,
         "message": "Expected to return a value at the end of arrow function.",
-        "line": 58,
+        "line": 53,
         "column": 37,
         "nodeType": "ArrowFunctionExpression",
         "messageId": "missingReturn",
-        "endLine": 58,
+        "endLine": 53,
         "endColumn": 39
       },
       {
         "ruleId": "no-console",
         "severity": 1,
         "message": "Unexpected console statement. Only these console methods are allowed: warn, error.",
-        "line": 69,
+        "line": 64,
         "column": 1,
         "nodeType": "MemberExpression",
         "messageId": "limited",
-        "endLine": 69,
+        "endLine": 64,
         "endColumn": 12,
         "suggestions": [
           {
             "fix": {
               "range": [
-                1535,
-                1560
+                1429,
+                1454
               ],
               "text": ""
             },
@@ -263,131 +274,21 @@
         "ruleId": "no-console",
         "severity": 1,
         "message": "Unexpected console statement. Only these console methods are allowed: warn, error.",
-        "line": 71,
+        "line": 66,
         "column": 24,
         "nodeType": "MemberExpression",
         "messageId": "limited",
-        "endLine": 71,
+        "endLine": 66,
         "endColumn": 35
       }
     ],
     "suppressedMessages": [],
     "errorCount": 2,
     "fatalErrorCount": 0,
-    "warningCount": 14,
+    "warningCount": 15,
     "fixableErrorCount": 1,
     "fixableWarningCount": 0,
-    "source": "import express from \"express\"; // ok\nimport cors from \"cors\"; // ok\n\nconst app = express();\n\n// ❌ [no-console]\nconsole.log(\"Starting server...\");\n\napp.use(cors());\n// ❌ [no-empty-function]\napp.use((_req, _res, _next) => {});\n\napp.use(express.json());\n\ntype Todo = { id: string; title: string; done: boolean };\nconst todos: Todo[] = [];\n\n// ❌ [no-unused-vars]\nconst unused = 42;\n\napp.get(\"/todos\", (req, res) => {\n    // ❌ [no-var]\n    var x = 1;\n\n    // ❌ [eqeqeq]\n    if (x == \"1\") {\n        console.log(\"loose comparison\"); // ❌ [no-console]\n    }\n\n    res.json(todos);\n});\n\napp.post(\"/todos\", (req, res) => {\n    // ❌ [@typescript-eslint/no-explicit-any]\n    const body: any = req.body;\n\n    const todo: Todo = {\n        id: Date.now().toString(),\n        title: body.title,\n        done: false,\n    };\n\n    todos.push(todo);\n    res.status(201).json(todo);\n});\n\napp.put(\"/todos/:id\", async (req, res) => {\n    // ❌ [promise/always-return] — pas de `return` dans async\n    const idx = todos.findIndex(t => t.id === req.params.id);\n\n    // ❌ [security/detect-object-injection]\n    if (idx === -1) res.status(404).json({ error: \"Not found\" });\n\n    todos[idx] = { ...todos[idx], ...req.body };\n    res.json(todos[idx]);\n});\n\napp.delete(\"/todos/:id\", (req, res) => {\n    const idx = todos.findIndex(t => t.id === req.params.id);\n    if (idx === -1) return res.status(404).json({ error: \"Not found\" });\n\n    const [removed] = todos.splice(idx, 1);\n    res.json(removed);\n});\n\nconst PORT = process.env.PORT ?? \"8080\";\n\n// ❌ [no-console]\nconsole.log(\"App ready\");\n\napp.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`)); // ❌ [no-console]\n",
-    "usedDeprecatedRules": [
-      {
-        "ruleId": "@typescript-eslint/no-empty-interface",
-        "replacedBy": [
-          "@typescript-eslint/no-empty-object-type"
-        ],
-        "info": {
-          "deprecatedSince": "8.0.0",
-          "replacedBy": [
-            {
-              "rule": {
-                "name": "@typescript-eslint/no-empty-object-type",
-                "url": "https://typescript-eslint.io/rules/no-empty-object-type"
-              }
-            }
-          ],
-          "url": "https://github.com/typescript-eslint/typescript-eslint/pull/8977"
-        }
-      },
-      {
-        "ruleId": "callback-return",
-        "replacedBy": [
-          "n/callback-return"
-        ],
-        "info": {
-          "message": "Node.js rules were moved out of ESLint core.",
-          "url": "https://eslint.org/docs/latest/use/migrating-to-7.0.0#deprecate-node-rules",
-          "deprecatedSince": "7.0.0",
-          "availableUntil": null,
-          "replacedBy": [
-            {
-              "message": "eslint-plugin-n now maintains deprecated Node.js-related rules.",
-              "plugin": {
-                "name": "eslint-plugin-n",
-                "url": "https://github.com/eslint-community/eslint-plugin-n"
-              },
-              "rule": {
-                "name": "callback-return",
-                "url": "https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/callback-return.md"
-              }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "filePath": "/Users/aymericmaillot/Desktop/cloudRunTest/todo-api/api/tests/units/app.test.ts",
-    "messages": [],
-    "suppressedMessages": [],
-    "errorCount": 0,
-    "fatalErrorCount": 0,
-    "warningCount": 0,
-    "fixableErrorCount": 0,
-    "fixableWarningCount": 0,
-    "usedDeprecatedRules": [
-      {
-        "ruleId": "@typescript-eslint/no-empty-interface",
-        "replacedBy": [
-          "@typescript-eslint/no-empty-object-type"
-        ],
-        "info": {
-          "deprecatedSince": "8.0.0",
-          "replacedBy": [
-            {
-              "rule": {
-                "name": "@typescript-eslint/no-empty-object-type",
-                "url": "https://typescript-eslint.io/rules/no-empty-object-type"
-              }
-            }
-          ],
-          "url": "https://github.com/typescript-eslint/typescript-eslint/pull/8977"
-        }
-      },
-      {
-        "ruleId": "callback-return",
-        "replacedBy": [
-          "n/callback-return"
-        ],
-        "info": {
-          "message": "Node.js rules were moved out of ESLint core.",
-          "url": "https://eslint.org/docs/latest/use/migrating-to-7.0.0#deprecate-node-rules",
-          "deprecatedSince": "7.0.0",
-          "availableUntil": null,
-          "replacedBy": [
-            {
-              "message": "eslint-plugin-n now maintains deprecated Node.js-related rules.",
-              "plugin": {
-                "name": "eslint-plugin-n",
-                "url": "https://github.com/eslint-community/eslint-plugin-n"
-              },
-              "rule": {
-                "name": "callback-return",
-                "url": "https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/callback-return.md"
-              }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "filePath": "/Users/aymericmaillot/Desktop/cloudRunTest/todo-api/api/vitest.config.ts",
-    "messages": [],
-    "suppressedMessages": [],
-    "errorCount": 0,
-    "fatalErrorCount": 0,
-    "warningCount": 0,
-    "fixableErrorCount": 0,
-    "fixableWarningCount": 0,
+    "source": "import express from \"express\"; // ok\nimport cors from \"cors\"; // ok\n\nconst app = express();\n\n// ❌ [no-console]\nconsole.log(\"Starting server...\");\n\napp.use(cors());\n// ❌ [no-empty-function]\napp.use((_req, _res, _next) => {});\n\napp.use(express.json());\n\ntype Todo = { id: string; title: string; done: boolean };\nconst todos: Todo[] = [];\n\n// ❌ [no-unused-vars]\nconst unused = 42;\n\napp.get(\"/todos\", (req, res) => {\n    // ❌ [no-var]\n    var x = 1;\n\n    res.json(todos);\n});\n\napp.post(\"/todos\", (req, res) => {\n    // ❌ [@typescript-eslint/no-explicit-any]\n    const body: any = req.body;\n\n    const todo: Todo = {\n        id: Date.now().toString(),\n        title: body.title,\n        done: false,\n    };\n\n    todos.push(todo);\n    res.status(201).json(todo);\n});\n\napp.put(\"/todos/:id\", async (req, res) => {\n    // ❌ [promise/always-return] — pas de `return` dans async\n    const idx = todos.findIndex(t => t.id === req.params.id);\n\n    // ❌ [security/detect-object-injection]\n    if (idx === -1) res.status(404).json({ error: \"Not found\" });\n\n    todos[idx] = { ...todos[idx], ...req.body };\n    res.json(todos[idx]);\n});\n\napp.delete(\"/todos/:id\", (req, res) => {\n    const idx = todos.findIndex(t => t.id === req.params.id);\n    if (idx === -1) return res.status(404).json({ error: \"Not found\" });\n\n    const [removed] = todos.splice(idx, 1);\n    res.json(removed);\n});\n\nconst PORT = process.env.PORT ?? 8080;\n\n// ❌ [no-console]\nconsole.log(\"App ready\");\n\napp.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`)); // ❌ [no-console]\n",
     "usedDeprecatedRules": [
       {
         "ruleId": "@typescript-eslint/no-empty-interface",

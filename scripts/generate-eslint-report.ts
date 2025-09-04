@@ -1,5 +1,6 @@
 import { ESLint } from "eslint";
 import fs from "fs/promises";
+import path from "path";
 
 async function main() {
     const eslint = new ESLint({
@@ -9,10 +10,16 @@ async function main() {
 
     const results = await eslint.lintFiles(["api/src/**/*.{ts,js}"]);
 
-    const json = JSON.stringify(results, null, 2);
+    // Remplace les filePath absolus par des chemins relatifs
+    const fixedResults = results.map(result => ({
+        ...result,
+        filePath: path.relative(process.cwd(), result.filePath),
+    }));
+
+    const json = JSON.stringify(fixedResults, null, 2);
     await fs.writeFile("eslint-report.json", json, "utf-8");
 
-    console.log("✅ ESLint report generated → eslint-report.json");
+    console.log("ESLint report generated → eslint-report.json");
 }
 
 main().catch(err => {

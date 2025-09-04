@@ -54,6 +54,12 @@
         ]
       }
     },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm sonar-scanner"
+      }
+    },
     "serve": {
       "continuous": true,
       "executor": "@nx/js:node",
