@@ -11,46 +11,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  #  tests:
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - uses: actions/checkout@v4
-  #      - uses: pnpm/action-setup@v4
-  #      - uses: actions/setup-node@v4
-  #        with:
-  #          node-version: 20
-  #          cache: pnpm
-  #          cache-dependency-path: '**/pnpm-lock.yaml'
-  #      - name: Install deps
-  #        run: pnpm install --frozen-lockfile
-  #      - name: Run tests
-  #        run: pnpm nx run api:test -- --coverage
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: pnpm nx run api:test -- --coverage
 
-  #  sonar:
-  #    runs-on: ubuntu-latest
-  #    needs: tests
-  #    steps:
-  #      - uses: actions/checkout@v4
-  #      - uses: pnpm/action-setup@v4
-  #      - uses: actions/setup-node@v4
-  #        with:
-  #          node-version: 20
-  #          cache: pnpm
-  #          cache-dependency-path: '**/pnpm-lock.yaml'
-  #      - name: Install deps
-  #        run: pnpm install --frozen-lockfile
-  #      - name: SonarCloud Scan
-  #        uses: SonarSource/sonarcloud-github-action@v2
-  #        env:
-  #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #        with:
-  #          projectBaseDir: .
+  sonar:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: .
 
   build:
     name: Build app (Nx) et publier dist
     runs-on: ubuntu-latest
-    #    needs: sonar
+    needs: sonar
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -99,3 +99,42 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend-cloudrun:latest,${{ secrets.DOCKERHUB_USERNAME }}/backend-cloudrun:sha-${{ github.sha }}
+
+  trivy-image-local:
+    name: Trivy (image, no push)
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build image (load locally, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          load: true                  # ← charge dans le daemon local
+          tags: app:scan-candidate    # tag local arbitraire
+
+      - name: Trivy image scan
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: app:scan-candidate
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '1'              # ← échoue si vuln CRITICAL/HIGH
+          format: sarif
+          output: trivy-image.sarif
+
+      - name: Upload SARIF (image)
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-image.sarif
