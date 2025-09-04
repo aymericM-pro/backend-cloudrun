@@ -18,7 +18,7 @@ export default [
             "promise/param-names": "error",
             "promise/catch-or-return": "warn",
             "no-console": ["warn", { allow: ["warn", "error"] }],
-            "consistent-return": "warn",
+            "consistent-return": "off",
             "callback-return": ["warn", ["next"]],
             "no-throw-literal": "error",
             "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],

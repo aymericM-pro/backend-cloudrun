@@ -1,0 +1,89 @@
+[
+  {
+    "filePath": "api/src/main.ts",
+    "messages": [
+      {
+        "ruleId": "security/detect-object-injection",
+        "severity": 1,
+        "message": "Generic Object Injection Sink",
+        "line": 52,
+        "column": 5,
+        "nodeType": "MemberExpression",
+        "endLine": 52,
+        "endColumn": 15
+      },
+      {
+        "ruleId": "security/detect-object-injection",
+        "severity": 1,
+        "message": "Generic Object Injection Sink",
+        "line": 53,
+        "column": 12,
+        "nodeType": "MemberExpression",
+        "endLine": 53,
+        "endColumn": 22
+      },
+      {
+        "ruleId": "security/detect-object-injection",
+        "severity": 1,
+        "message": "Function Call Object Injection Sink",
+        "line": 58,
+        "column": 14,
+        "nodeType": "MemberExpression",
+        "endLine": 58,
+        "endColumn": 24
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 3,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import express from \"express\";\nimport cors from \"cors\";\n\nconst app = express();\n\napp.use(cors());\napp.use(express.json());\n\ntype Todo = { id: string; title: string; done: boolean };\nconst todos: Todo[] = [];\n\napp.get(\"/todos\", (_, res) => {\n    res.json(todos);\n});\n\napp.post(\"/todos\", (req, res) => {\n    const { title } = req.body;\n    if (typeof title !== \"string\") {\n        return res.status(400).json({ error: \"Invalid title\" });\n    }\n\n    const todo: Todo = {\n        id: Date.now().toString(),\n        title,\n        done: false,\n    };\n\n    todos.push(todo);\n    res.status(201).json(todo);\n});\n\napp.put(\"/todos/:id\", (req, res) => {\n    const { title, done } = req.body;\n    const { id } = req.params;\n\n    if (typeof id !== \"string\") {\n        return res.status(400).json({ error: \"Invalid id\" });\n    }\n\n    const idx = todos.findIndex(t => t.id === id);\n    if (idx === -1) {\n        return res.status(404).json({ error: \"Not found\" });\n    }\n\n    if (title !== undefined && typeof title !== \"string\") {\n        return res.status(400).json({ error: \"Invalid title\" });\n    }\n    if (done !== undefined && typeof done !== \"boolean\") {\n        return res.status(400).json({ error: \"Invalid done status\" });\n    }\n\n    todos[idx] = {\n        ...todos[idx],\n        ...(title !== undefined ? { title } : {}),\n        ...(done !== undefined ? { done } : {}),\n    };\n\n    res.json(todos[idx]);\n});\n\napp.delete(\"/todos/:id\", (req, res) => {\n    const { id } = req.params;\n    if (typeof id !== \"string\") {\n        return res.status(400).json({ error: \"Invalid id\" });\n    }\n\n    const idx = todos.findIndex(t => t.id === id);\n    if (idx === -1) {\n        return res.status(404).json({ error: \"Not found\" });\n    }\n\n    const [removed] = todos.splice(idx, 1);\n    res.json(removed);\n});\n\nconst PORT = process.env.PORT ?? \"8080\";\nconsole.warn(`API running on http://localhost:${PORT}`);\napp.listen(PORT);\n",
+    "usedDeprecatedRules": [
+      {
+        "ruleId": "@typescript-eslint/no-empty-interface",
+        "replacedBy": [
+          "@typescript-eslint/no-empty-object-type"
+        ],
+        "info": {
+          "deprecatedSince": "8.0.0",
+          "replacedBy": [
+            {
+              "rule": {
+                "name": "@typescript-eslint/no-empty-object-type",
+                "url": "https://typescript-eslint.io/rules/no-empty-object-type"
+              }
+            }
+          ],
+          "url": "https://github.com/typescript-eslint/typescript-eslint/pull/8977"
+        }
+      },
+      {
+        "ruleId": "callback-return",
+        "replacedBy": [
+          "n/callback-return"
+        ],
+        "info": {
+          "message": "Node.js rules were moved out of ESLint core.",
+          "url": "https://eslint.org/docs/latest/use/migrating-to-7.0.0#deprecate-node-rules",
+          "deprecatedSince": "7.0.0",
+          "availableUntil": null,
+          "replacedBy": [
+            {
+              "message": "eslint-plugin-n now maintains deprecated Node.js-related rules.",
+              "plugin": {
+                "name": "eslint-plugin-n",
+                "url": "https://github.com/eslint-community/eslint-plugin-n"
+              },
+              "rule": {
+                "name": "callback-return",
+                "url": "https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/callback-return.md"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
