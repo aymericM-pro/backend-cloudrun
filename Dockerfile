@@ -1,19 +1,14 @@
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-COPY . .
-RUN npm install -g pnpm && pnpm install
-RUN pnpm nx build api
-
-FROM node:20-alpine AS runner
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/api ./dist
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g pnpm && pnpm install --prod
+RUN corepack enable && corepack prepare pnpm@latest --activate \
+ && pnpm install --frozen-lockfile --prod
 
+COPY dist/api ./dist/api
+
+ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/api/main.js"]
