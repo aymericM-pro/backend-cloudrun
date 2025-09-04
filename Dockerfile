@@ -3,9 +3,9 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-
+COPY package.json ./
 RUN corepack enable && corepack prepare pnpm@latest --activate \
- && pnpm install --frozen-lockfile --prod
+ && pnpm install --prod --no-frozen-lockfile
 
 COPY dist/api ./dist/api
 
