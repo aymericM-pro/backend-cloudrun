@@ -47,6 +47,9 @@ jobs:
       - name: Generate ESLint report
         run: pnpm nx lint api --format json -o eslint-report.json
 
+      - name: Check ESLint report
+        run: ls -lah && cat eslint-report.json || echo "ESLint report not found"
+
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
@@ -54,6 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectBaseDir: .
+
   build:
     name: Build app
     runs-on: ubuntu-latest
