@@ -1,0 +1,7 @@
+organization=aymericm-pro
+projectKey=aymericM-pro_backend-cloudrun
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.66870
+dashboardUrl=https://sonarcloud.io/dashboard?id=aymericM-pro_backend-cloudrun
+ceTaskId=AZkWl-RAevCajDlPxZD3
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZkWl-RAevCajDlPxZD3
